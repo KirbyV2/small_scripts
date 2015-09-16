@@ -1,2 +1,2 @@
-# quick_scripts
-A collection of scripts that don't need their own repo.
+# small_scripts
+A collection of small scripts that don't need their own repo.
