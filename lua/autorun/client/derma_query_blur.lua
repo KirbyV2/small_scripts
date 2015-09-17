@@ -1,3 +1,12 @@
+surface.CreateFont( "TitleFont", {
+	font = "Lato Light",
+	size = 25,
+ 	weight = 250,
+	antialias = true,
+	strikeout = false,
+	additive = true,
+} )
+
 local blur = Material("pp/blurscreen")
 local function DrawBlur(panel, amount) --Panel blur function
 	local x, y = panel:LocalToScreen(0, 0)
@@ -20,15 +29,18 @@ end
 function Derma_Query( strText, strTitle, ... )
 
 	local Window = vgui.Create( "DFrame" )
-		Window:SetTitle( strTitle or "Message Title (First Parameter)" )
+		Window:SetTitle( "" )
 		Window:SetDraggable( false )
 		Window:ShowCloseButton( false )
 		Window:SetBackgroundBlur( false )
 		Window:SetDrawOnTop( true )
-		Window.Paint = function()
+		Window.Paint = function( self, w, h )
 			DrawBlur(Window, 2)
-			drawRectOutline( 0, 0, Window:GetWide(), Window:GetTall(), Color( 0, 0, 0, 85 ) )
-			draw.RoundedBox(0, 0, 0, Window:GetWide(), Window:GetTall(), Color(0, 0, 0, 85))
+			drawRectOutline( 0, 0, w, h, Color( 0, 0, 0, 85 ) )
+			draw.RoundedBox( 0, 0, 0, w, h, Color(0, 0, 0, 85) )
+			drawRectOutline( 2, 2, w - 4, h / 3.9, Color( 0, 0, 0, 85 ) )
+			draw.RoundedBox( 0, 2, 2, w - 4, h / 4, Color(0,0,0,105) )
+			draw.SimpleText( strTitle, "TitleFont", w / 2, 12, Color(255,255,255,255), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 		end
 		
 	local InnerPanel = vgui.Create( "DPanel", Window )
@@ -60,13 +72,13 @@ function Derma_Query( strText, strTitle, ... )
 			Button:SizeToContents()
 			Button:SetTall( 20 )
 			Button:SetTextColor(Color(255,255,255))
-			Button:SetWide( Button:GetWide() + 20 )
+			Button:SetWide( Button:GetWide() + 25 )
 			Button.DoClick = function() Window:Close(); Func() end
 			Button:SetPos( x, 5 )
-			Button.Paint = function()
+			Button.Paint = function( self, w, h )
 				DrawBlur(Button, 2)
-				drawRectOutline( 0, 0, Button:GetWide(), Button:GetTall(), Color( 0, 0, 0, 85 ) )
-				draw.RoundedBox(0, 0, 0, Button:GetWide(), Button:GetTall(), Color(0, 0, 0, 85))
+				drawRectOutline( 0, 0, w, h, Color( 0, 0, 0, 85 ) )
+				draw.RoundedBox(0, 0, 0, w, h, self.Hovered and Color( 0, 0, 0, 85 ) or Color( 0, 0, 0, 65 ) )
 			end
 		x = x + Button:GetWide() + 5
 			
